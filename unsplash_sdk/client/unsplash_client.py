@@ -1,6 +1,7 @@
 import json
 import requests
 import urllib
+import ssl
 
 
 class UnsplashClient:
@@ -14,12 +15,13 @@ class UnsplashClient:
     @staticmethod
     def download_images(results_list):
         local_storage_path = 'local_storage'
-        for image_info in results_list[0:1]:
+        ssl._create_default_https_context = ssl._create_unverified_context
+        for image_info in results_list[0:5]:
             image_id = image_info['id']
             image_url = image_info['urls']['thumb']
             image_storage_path = '{}/{}.jpg'.format(local_storage_path, image_id)
             urllib.request.urlretrieve(image_url, image_storage_path)
-            print('image downloaded to local storage')
+            print('image \'{}\' downloaded to local storage'.format(image_id))
 
     def list_photos(self, pages_num=2, per_page=10, download_results=False):
         auth_headers = self.sdk_auth.get_auth_headers(action_type='public')
@@ -28,15 +30,15 @@ class UnsplashClient:
                 'per_page': per_page,
             }
             for page_num in range(pages_num):
-                params['page'] = page_num
+                params['page'] = page_num + 1
                 response = requests.get(url=self.PHOTOS_URL, params=params, headers=auth_headers)
                 response_body = json.loads(response.content)
                 print('Printing photos of page {}'.format(page_num))
                 for photo in response_body:
                     print('{}: {}'.format(photo.get('id'), photo.get('urls').get('full')))
 
-            if download_results:
-                self.download_images(response_body)
+                if download_results:
+                    self.download_images(response_body)
 
         except Exception as e:
             print(e)
