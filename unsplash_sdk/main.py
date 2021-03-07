@@ -27,7 +27,7 @@ def main():
     action = actions[0]
 
     if action == 'list_photos':
-        uc.list_photos(20, False)
+        uc.list_photos(3, 20, False)
     elif action == 'list_collection':
         uc.list_collections()
     elif action == 'create_collection':
