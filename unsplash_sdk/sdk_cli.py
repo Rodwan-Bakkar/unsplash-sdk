@@ -6,9 +6,6 @@ from unsplash_sdk.client.unsplash_client import UnsplashClient
 from unsplash_sdk.client.auth import SDKAuth
 
 
-API_URL = 'https://api.unsplash.com/search'
-
-
 def main():
 
     access_key = os.environ.get('US_SDK_ACCESS_KEY')
@@ -24,21 +21,35 @@ def main():
 
     parser.add_argument('--download-photos', type=str, help='')
 
+    parser.add_argument('--collection-title', type=str, help='')
+    parser.add_argument('--collection-description', type=str, help='')
+    parser.add_argument('--collection-private', type=str, help='')
+
     parser.add_argument('--collection-id', type=str, help='')
     parser.add_argument('--photo-id', type=str, help='')
 
     args = parser.parse_args()
 
     action = args.action
+    download_photos = args.download_photos if args.download_photos else False
+
+    collection_title = args.collection_title
+    collection_description = args.collection_description
+    collection_private = args.collection_private if args.collection_private else False
+
+    print(collection_title, collection_description, collection_private)
+
+    collection_id = args.collection_id
+    photo_id = args.photo_id
 
     if action == 'list_photos':
-        uc.list_photos()
+        uc.list_photos(download_photos)
     elif action == 'list_collections':
-        pass
+        uc.list_collections()
     elif action == 'create_collection':
-        pass
+        uc.create_collection(collection_title, collection_description, collection_private)
     elif action == 'add_photo_to_collection':
-        pass
+        uc.add_photo_to_collection(collection_id, photo_id)
 
 
 if __name__ == '__main__':

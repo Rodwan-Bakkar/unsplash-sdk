@@ -23,9 +23,9 @@ def main():
     sdk_auth = SDKAuth(access_key, secret_key, email, password)
     uc = UnsplashClient(sdk_auth)
 
-    uc.list_photos(True)
+    # uc.list_photos(True)
     # uc.list_collections()
-    # uc.create_collection('test_collection5')
+    uc.create_collection('test_collection23', 'some_description', True)
     # uc.add_photo_to_collection('23640519', 'KIDGf43UPOw')
 
 

@@ -2,3 +2,4 @@
 .idea/
 *.egg-info
 */__pycache__/*
+unsplash_sdk/local_storage/

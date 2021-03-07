@@ -40,8 +40,10 @@ class UnsplashClient:
         try:
             response = requests.get(url=self.COLLECTIONS_URL, headers=auth_headers)
             response_body = json.loads(response.content)
-
-            print(len(response_body))
+            for collection in response_body:
+                print('{}: {}: {}'.format(collection.get('id'),
+                                          collection.get('title'),
+                                          collection.get('links').get('self')))
 
         except Exception as e:
             print(e)
@@ -60,7 +62,7 @@ class UnsplashClient:
             response = requests.post(url=self.COLLECTIONS_URL, data=post_data, headers=auth_headers)
             response_body = json.loads(response.content)
 
-            print('Collection, {}, was created'.format(response_body.get('title')))
+            print('Collection \'{}\' with id \'{}\' was created'.format(title, response_body.get('id')))
 
         except Exception as e:
             print(e)
@@ -76,7 +78,7 @@ class UnsplashClient:
         try:
             response = requests.post(url=url, data=data, headers=auth_headers)
             if response.status_code == 201:
-                print('Photo, {}, was added to cllection {}'.format(collection_id, photo_id))
+                print('Photo \'{}\', was added to cllection \'{}\''.format(photo_id, collection_id))
 
         except Exception as e:
             print(e)
