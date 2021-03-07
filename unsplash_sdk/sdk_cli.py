@@ -20,6 +20,7 @@ def main():
     parser.add_argument('--action', type=str, help='which method to execute')
 
     parser.add_argument('--download-photos', type=str, help='')
+    parser.add_argument('--per-page', type=str, help='')
 
     parser.add_argument('--collection-title', type=str, help='')
     parser.add_argument('--collection-description', type=str, help='')
@@ -31,19 +32,19 @@ def main():
     args = parser.parse_args()
 
     action = args.action
+
     download_photos = args.download_photos if args.download_photos else False
+    per_page = args.per_page if args.per_page else 10
 
     collection_title = args.collection_title
     collection_description = args.collection_description
     collection_private = args.collection_private if args.collection_private else False
 
-    print(collection_title, collection_description, collection_private)
-
     collection_id = args.collection_id
     photo_id = args.photo_id
 
     if action == 'list_photos':
-        uc.list_photos(download_photos)
+        uc.list_photos(per_page, download_photos)
     elif action == 'list_collections':
         uc.list_collections()
     elif action == 'create_collection':

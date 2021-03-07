@@ -23,10 +23,17 @@ def main():
     sdk_auth = SDKAuth(access_key, secret_key, email, password)
     uc = UnsplashClient(sdk_auth)
 
-    # uc.list_photos(True)
-    # uc.list_collections()
-    uc.create_collection('test_collection23', 'some_description', True)
-    # uc.add_photo_to_collection('23640519', 'KIDGf43UPOw')
+    actions = ['list_photos', 'list_collection', 'create_collection', 'add_photo_to_collection']
+    action = actions[0]
+
+    if action == 'list_photos':
+        uc.list_photos(20, False)
+    elif action == 'list_collection':
+        uc.list_collections()
+    elif action == 'create_collection':
+        uc.create_collection('test_collection23', 'some_description', True)
+    elif action == 'add_photo_to_collection':
+        uc.add_photo_to_collection('23640519', 'KIDGf43UPOw')
 
 
 if __name__ == '__main__':

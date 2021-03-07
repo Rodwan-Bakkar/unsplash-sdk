@@ -21,13 +21,19 @@ class UnsplashClient:
             urllib.request.urlretrieve(image_url, image_storage_path)
             print('image downloaded to local storage')
 
-    def list_photos(self, download_results=False):
+    def list_photos(self, per_page=10, download_results=False):
         auth_headers = self.sdk_auth.get_auth_headers(action_type='public')
         try:
-            response = requests.get(url=self.PHOTOS_URL, headers=auth_headers)
-            response_body = json.loads(response.content)
-            for photo in response_body:
-                print('{}: {}'.format(photo.get('id'), photo.get('urls').get('full')))
+            params = {
+                'per_page': per_page,
+            }
+            for page_num in range(2):
+                params['page'] = page_num
+                response = requests.get(url=self.PHOTOS_URL, params=params, headers=auth_headers)
+                response_body = json.loads(response.content)
+                print('Printing photos of page {}'.format(page_num))
+                for photo in response_body:
+                    print('{}: {}'.format(photo.get('id'), photo.get('urls').get('full')))
 
             if download_results:
                 self.download_images(response_body)
