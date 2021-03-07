@@ -26,6 +26,9 @@ class UnsplashClient:
         try:
             response = requests.get(url=self.PHOTOS_URL, headers=auth_headers)
             response_body = json.loads(response.content)
+            for photo in response_body:
+                print('{}: {}'.format(photo.get('id'), photo.get('urls').get('full')))
+
             if download_results:
                 self.download_images(response_body)
 
@@ -44,7 +47,8 @@ class UnsplashClient:
             print(e)
 
     def create_collection(self, title, description=None, private=False):
-        auth_headers = self.sdk_auth.get_auth_headers(action_type='user-specific')
+        auth_headers = self.sdk_auth.get_auth_headers(action_type='user-specific',
+                                                      scope=['write_collections'])
         post_data = {
             'title': title,
             'private': private,
@@ -61,6 +65,25 @@ class UnsplashClient:
         except Exception as e:
             print(e)
 
-    def add_photo(self):
-        pass
+    def add_photo_to_collection(self, collection_id, photo_id):
+        auth_headers = self.sdk_auth.get_auth_headers(action_type='user-specific',
+                                                      scope=['write_collections'])
+        url = '{}/{}/add'.format(self.COLLECTIONS_URL, collection_id)
+        data = {
+            'photo_id': photo_id
+        }
+
+        try:
+            response = requests.post(url=url, data=data, headers=auth_headers)
+            if response.status_code == 201:
+                print('Photo, {}, was added to cllection {}'.format(collection_id, photo_id))
+
+        except Exception as e:
+            print(e)
+
+
+
+
+
+
 

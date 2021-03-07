@@ -17,7 +17,7 @@ class SDKAuth:
         self.email = email
         self.password = password
 
-    def get_auth_headers(self, action_type):
+    def get_auth_headers(self, action_type, scope=None):
         if action_type == 'public':
             headers = {
                 'Authorization': 'Client-ID {}'.format(self.access_key)
@@ -26,7 +26,7 @@ class SDKAuth:
 
             oauth = OAuth2Session(client_id=self.access_key,
                                   redirect_uri=self.REDIRECT_URI,
-                                  scope=['write_collections'])
+                                  scope=scope)
             authorization_url, state = oauth.authorization_url(self.AUTH_URL,
                                                                access_type="offline",
                                                                grant_type='authorization_code'
